@@ -11,7 +11,8 @@ public class UserDaoJDBCImpl implements UserDao {
     private Connection connection = Util.getConnection();
     public void createUsersTable() {
         // Команда создания таблицы
-        String createUTSQL = "CREATE TABLE IF NOT EXISTS users (Id BIGINT PRIMARY KEY AUTO_INCREMENT, Name VARCHAR(45), LastName VARCHAR(45),Age INT)";
+        String createUTSQL = "CREATE TABLE IF NOT EXISTS users" +
+                " (Id BIGINT PRIMARY KEY AUTO_INCREMENT, Name VARCHAR(45), LastName VARCHAR(45),Age INT)";
         try {
             try (Statement statement = connection.createStatement()) {
                 // Создание таблицы
