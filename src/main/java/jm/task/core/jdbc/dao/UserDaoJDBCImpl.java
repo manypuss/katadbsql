@@ -41,18 +41,18 @@ public class UserDaoJDBCImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         // Команда добавления пользователя
         String saveUserSQL = "INSERT INTO users (Name, LastName, Age) VALUES (?, ?, ?)";
-        try {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(saveUserSQL)) {
-                connection.setAutoCommit(false);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(saveUserSQL)) {
 
-                preparedStatement.setString(1, name);
-                preparedStatement.setString(2, lastName);
-                preparedStatement.setInt(3, age);
+            connection.setAutoCommit(false);
 
-                preparedStatement.executeUpdate();
-                connection.commit();
-                System.out.println("User с именем - " + name + " добавлен в базу данных");
-            }
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setInt(3, age);
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+            System.out.println("User с именем - " + name + " добавлен в базу данных");
+
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -66,13 +66,13 @@ public class UserDaoJDBCImpl implements UserDao {
     public void removeUserById(long id) {
         // Команда удаления пользователя из таблицы
         String remUsByIdSQL = "DELETE FROM users WHERE ID = ?";
-        try {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(remUsByIdSQL)) {
-                // Удаление пользователя из таблицы по ID
-                preparedStatement.setLong(1, id);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(remUsByIdSQL)) {
 
-                preparedStatement.executeUpdate();
-            }
+            // Удаление пользователя из таблицы по ID
+            preparedStatement.setLong(1, id);
+
+            preparedStatement.executeUpdate();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -83,21 +83,21 @@ public class UserDaoJDBCImpl implements UserDao {
 
         // Команда полуения всех пользователей из таблицы
         String getAllUsersSQL = "SELECT * FROM users";
-        try {
-            try (Statement statement = connection.createStatement()) {
-                // Получаем пользователей
-                ResultSet resultSet = statement.executeQuery(getAllUsersSQL);
+        try (Statement statement = connection.createStatement()) {
 
-                while (resultSet.next()) {
-                    User user = new User();
-                    user.setId(resultSet.getLong("Id"));
-                    user.setName(resultSet.getString("Name"));
-                    user.setLastName(resultSet.getString("LastName"));
-                    user.setAge(resultSet.getByte("Age"));
+            // Получаем пользователей
+            ResultSet resultSet = statement.executeQuery(getAllUsersSQL);
 
-                    users.add(user);
-                }
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getLong("Id"));
+                user.setName(resultSet.getString("Name"));
+                user.setLastName(resultSet.getString("LastName"));
+                user.setAge(resultSet.getByte("Age"));
+
+                users.add(user);
             }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -107,11 +107,11 @@ public class UserDaoJDBCImpl implements UserDao {
     public void cleanUsersTable() {
         // Команда очистки таблицы
         String cleanUTSQL = "DELETE FROM users";
-        try {
-            try (Statement statement = connection.createStatement()) {
-                // Очистка таблицы
-                statement.executeUpdate(cleanUTSQL);
-            }
+        try (Statement statement = connection.createStatement()) {
+
+            // Очистка таблицы
+            statement.executeUpdate(cleanUTSQL);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
