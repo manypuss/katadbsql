@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
-    Session session = Util.getSessionFactory().openSession();
+    private Session session = Util.getSessionFactory().openSession();
 
     @Override
     public void createUsersTable() {
